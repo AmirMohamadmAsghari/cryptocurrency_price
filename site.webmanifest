@@ -1,0 +1,22 @@
+{
+  "name": "قیمت لحظه‌ای ارز دیجیتال و نرخ ارز",
+  "short_name": "قیمت ارز",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#0a8",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "lang": "fa",
+  "dir": "rtl"
+} 

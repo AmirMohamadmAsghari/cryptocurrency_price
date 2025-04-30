@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Favicons</title>
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="favicon16" width="16" height="16"></canvas>
+  <canvas id="favicon32" width="32" height="32"></canvas>
+  <canvas id="appleTouch" width="180" height="180"></canvas>
+  <canvas id="android192" width="192" height="192"></canvas>
+  <canvas id="android512" width="512" height="512"></canvas>
+  
+  <script>
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="240" fill="#0a8" opacity="0.1"/>
+  <path d="M256 96v320M208 160h96M208 352h96" 
+        stroke="#0a8" 
+        stroke-width="32" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  <path d="M160 256c0-53 43-96 96-96s96 43 96 96-43 96-96 96-96-43-96-96z" 
+        fill="none" 
+        stroke="#0a8" 
+        stroke-width="32"/>
+  <path d="M208 208h96M208 304h96" 
+        stroke="#0a8" 
+        stroke-width="32" 
+        stroke-linecap="round"/>
+</svg>`;
+
+    function generateFavicon(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      
+      const img = new Image();
+      const svgBlob = new Blob([svg], {type: 'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(svgBlob);
+      
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, size, size);
+        const link = document.createElement('a');
+        link.download = `${canvasId}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+      
+      img.src = url;
+    }
+
+    // تولید فایل‌های favicon
+    generateFavicon('favicon16', 16);
+    generateFavicon('favicon32', 32);
+    generateFavicon('appleTouch', 180);
+    generateFavicon('android192', 192);
+    generateFavicon('android512', 512);
+  </script>
+</body>
+</html> 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- دایره پس‌زمینه -->
+  <circle cx="256" cy="256" r="240" fill="#0a8" opacity="0.1"/>
+  
+  <!-- نماد دلار -->
+  <path d="M256 96v320M208 160h96M208 352h96" 
+        stroke="#0a8" 
+        stroke-width="32" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- نماد بیت‌کوین -->
+  <path d="M160 256c0-53 43-96 96-96s96 43 96 96-43 96-96 96-96-43-96-96z" 
+        fill="none" 
+        stroke="#0a8" 
+        stroke-width="32"/>
+  <path d="M208 208h96M208 304h96" 
+        stroke="#0a8" 
+        stroke-width="32" 
+        stroke-linecap="round"/>
+</svg> 
