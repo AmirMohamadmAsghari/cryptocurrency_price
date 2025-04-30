@@ -1,132 +1,429 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="5HgpNHiovmWUmkkZIs20d1knygJYFNfzuyfB7eG-UY0" />
-  <title>داشبورد قیمت ارز دیجیتال</title>
+  <title>داشبورد پیشرفته قیمت ارز دیجیتال</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   <style>
+    :root {
+      --primary-color: #0a8;
+      --secondary-color: #f7931a;
+      --text-color: #333;
+      --bg-color: #f4f4f4;
+      --card-bg: #fff;
+      --up-color: #16c784;
+      --down-color: #ea3943;
+      --border-radius: 10px;
+      --box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    [data-theme="dark"] {
+      --primary-color: #2ebd85;
+      --text-color: #f0f0f0;
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    
     body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      direction: rtl;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
       margin: 0;
       padding: 0;
+      transition: all 0.3s ease;
     }
+    
     .container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 2rem;
     }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
     h1 {
       text-align: center;
-      color: #333;
-    }
-    .crypto-card {
-      background: white;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .crypto-card h2 {
+      color: var(--primary-color);
       margin: 0;
-      color: #0a8;
     }
+    
+    .theme-toggle {
+      background: var(--card-bg);
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .crypto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .crypto-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .crypto-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .crypto-card h2 {
+      margin: 0 0 0.5rem 0;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+    
+    .crypto-card .symbol {
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
     .price {
       font-size: 1.5rem;
-      margin-top: 0.5rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
     }
-    canvas {
-      margin-top: 2rem;
+    
+    .change {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
     }
+    
+    .up {
+      color: var(--up-color);
+      background-color: rgba(22, 199, 132, 0.1);
+    }
+    
+    .down {
+      color: var(--down-color);
+      background-color: rgba(234, 57, 67, 0.1);
+    }
+    
+    .chart-container {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 2rem;
+    }
+    
     .converter {
-      background: #fff;
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .converter h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+    
+    .converter-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+    
+    input, select {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      background: var(--card-bg);
+      color: var(--text-color);
+      flex: 1;
+    }
+    
+    .result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1rem;
       padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-top: 2rem;
+      background: rgba(10, 136, 136, 0.1);
+      border-radius: var(--border-radius);
+    }
+    
+    .skeleton {
+      background: #e0e0e0;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 0.3; }
+      100% { opacity: 0.6; }
+    }
+    
+    .loading {
+      color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: loading 1.5s infinite;
+    }
+    
+    @keyframes loading {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .crypto-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .converter-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>داشبورد قیمت ارز دیجیتال</h1>
+    <header>
+      <h1>داشبورد پیشرفته قیمت ارز دیجیتال</h1>
+      <button class="theme-toggle" aria-label="تغییر تم">
+        <i data-feather="moon"></i>
+      </button>
+    </header>
 
-    <div class="crypto-card">
-      <h2>بیت‌کوین (BTC)</h2>
-      <div class="price" id="btc-price">در حال بارگذاری...</div>
+    <div class="crypto-grid">
+      <div class="crypto-card" id="bitcoin-card">
+        <h2>بیت‌کوین <span class="symbol">(BTC)</span></h2>
+        <div class="price loading">$00,000</div>
+        <div class="change loading">0.00%</div>
+      </div>
+
+      <div class="crypto-card" id="ethereum-card">
+        <h2>اتریوم <span class="symbol">(ETH)</span></h2>
+        <div class="price loading">$0,000</div>
+        <div class="change loading">0.00%</div>
+      </div>
+
+      <div class="crypto-card" id="dogecoin-card">
+        <h2>دوج‌کوین <span class="symbol">(DOGE)</span></h2>
+        <div class="price loading">$0.00</div>
+        <div class="change loading">0.00%</div>
+      </div>
+
+      <div class="crypto-card" id="solana-card">
+        <h2>سولانا <span class="symbol">(SOL)</span></h2>
+        <div class="price loading">$000</div>
+        <div class="change loading">0.00%</div>
+      </div>
     </div>
 
-    <div class="crypto-card">
-      <h2>اتریوم (ETH)</h2>
-      <div class="price" id="eth-price">در حال بارگذاری...</div>
+    <div class="chart-container">
+      <canvas id="btcChart" height="200"></canvas>
     </div>
 
-    <div class="crypto-card">
-      <h2>دوج‌کوین (DOGE)</h2>
-      <div class="price" id="doge-price">در حال بارگذاری...</div>
+    <div class="chart-container">
+      <canvas id="comparisonChart" height="200"></canvas>
     </div>
-
-    <canvas id="btcChart" height="150"></canvas>
 
     <div class="converter">
-      <h2>مبدل بیت‌کوین به دلار</h2>
-      <input type="number" id="btc-input" placeholder="مقدار BTC" style="padding: 0.5rem; width: 100%;">
-      <p id="btc-output" style="margin-top: 1rem; font-weight: bold;">نتیجه: —</p>
+      <h2>مبدل ارز دیجیتال</h2>
+      <div class="converter-row">
+        <input type="number" id="crypto-amount" placeholder="مقدار" value="1">
+        <select id="from-crypto">
+          <option value="bitcoin">بیت‌کوین (BTC)</option>
+          <option value="ethereum">اتریوم (ETH)</option>
+          <option value="dogecoin">دوج‌کوین (DOGE)</option>
+          <option value="solana">سولانا (SOL)</option>
+        </select>
+        <span>به</span>
+        <select id="to-currency">
+          <option value="usd">دلار آمریکا (USD)</option>
+          <option value="irr">تومان ایران (IRR)</option>
+          <option value="eur">یورو (EUR)</option>
+        </select>
+      </div>
+      <div class="result" id="conversion-result">نتیجه: —</div>
     </div>
   </div>
 
   <script>
+    // داده‌های جهانی
+    let cryptoData = {};
+    let currencyRates = { usd: 1, irr: 420000, eur: 0.85 }; // نرخ اولیه
+    
+    // تنظیمات اولیه
+    document.addEventListener('DOMContentLoaded', function() {
+      feather.replace();
+      initDashboard();
+      setupThemeToggle();
+    });
+
+    // راه‌اندازی داشبورد
+    async function initDashboard() {
+      showLoadingState();
+      await fetchPrices();
+      await fetchCurrencyRates();
+      await loadCharts();
+      setupConverter();
+      setupAutoRefresh();
+    }
+
+    // نمایش حالت بارگذاری
+    function showLoadingState() {
+      document.querySelectorAll('.price, .change').forEach(el => {
+        el.classList.add('loading');
+      });
+    }
+
+    // مخفی کردن حالت بارگذاری
+    function hideLoadingState() {
+      document.querySelectorAll('.price, .change').forEach(el => {
+        el.classList.remove('loading');
+      });
+    }
+
+    // دریافت قیمت ارزهای دیجیتال
     async function fetchPrices() {
       try {
-        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin&vs_currencies=usd");
+        const res = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,dogecoin,solana&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h");
         const data = await res.json();
-
-        const btc = data.bitcoin.usd;
-        const eth = data.ethereum.usd;
-        const doge = data.dogecoin.usd;
-
-        document.getElementById("btc-price").textContent = `$${btc.toLocaleString()}`;
-        document.getElementById("eth-price").textContent = `$${eth.toLocaleString()}`;
-        document.getElementById("doge-price").textContent = `$${doge.toLocaleString()}`;
-
-        document.getElementById("btc-input").addEventListener("input", (e) => {
-          const val = parseFloat(e.target.value);
-          if (!isNaN(val)) {
-            document.getElementById("btc-output").textContent = `نتیجه: $${(val * btc).toLocaleString()} دلار`;
-          } else {
-            document.getElementById("btc-output").textContent = "نتیجه: —";
-          }
-        });
-
+        
+        cryptoData = data.reduce((acc, coin) => {
+          acc[coin.id] = coin;
+          return acc;
+        }, {});
+        
+        renderCryptoCards();
+        
       } catch (e) {
-        console.error("Error fetching prices", e);
+        console.error("Error fetching crypto prices", e);
+        showError("خطا در دریافت داده‌ها. لطفاً اینترنت خود را بررسی کنید.");
       }
     }
 
-    async function loadChart() {
-      const res = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1");
-      const data = await res.json();
-      const prices = data.prices;
+    // دریافت نرخ ارزهای فیات
+    async function fetchCurrencyRates() {
+      try {
+        // در حالت واقعی می‌توانید از یک API مانند exchangerate-api.com استفاده کنید
+        // اینجا برای نمونه از مقادیر فرضی استفاده می‌کنیم
+        currencyRates.irr = 420000;
+        currencyRates.eur = 0.85;
+      } catch (e) {
+        console.error("Error fetching currency rates", e);
+      }
+    }
 
-      const labels = prices.map(p => new Date(p[0]).toLocaleTimeString());
-      const values = prices.map(p => p[1]);
+    // نمایش کارت‌های ارز دیجیتال
+    function renderCryptoCards() {
+      for (const [id, data] of Object.entries(cryptoData)) {
+        const element = document.getElementById(`${id}-card`);
+        if (element) {
+          element.querySelector('.price').textContent = `$${data.current_price.toLocaleString()}`;
+          
+          const changeElement = element.querySelector('.change');
+          changeElement.textContent = `${data.price_change_percentage_24h > 0 ? '↑' : '↓'} ${Math.abs(data.price_change_percentage_24h).toFixed(2)}%`;
+          changeElement.className = `change ${data.price_change_percentage_24h > 0 ? 'up' : 'down'}`;
+        }
+      }
+      hideLoadingState();
+    }
 
-      new Chart(document.getElementById("btcChart"), {
+    // بارگذاری نمودارها
+    async function loadCharts() {
+      try {
+        // نمودار قیمت بیت‌کوین در 7 روز گذشته
+        const btcRes = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7");
+        const btcData = await btcRes.json();
+        renderChart('btcChart', 'قیمت بیت‌کوین در 7 روز گذشته', btcData.prices, '#f7931a');
+        
+        // نمودار مقایسه‌ای
+        const [btcWeekly, ethWeekly] = await Promise.all([
+          fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"),
+          fetch("https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=7")
+        ]);
+        
+        const btcWeeklyData = await btcWeekly.json();
+        const ethWeeklyData = await ethWeekly.json();
+        
+        renderComparisonChart(btcWeeklyData.prices, ethWeeklyData.prices);
+        
+      } catch (e) {
+        console.error("Error loading charts", e);
+      }
+    }
+
+    // رندر نمودار خطی
+    function renderChart(canvasId, label, priceData, color) {
+      const labels = priceData.map(([timestamp]) => 
+        new Date(timestamp).toLocaleDateString('fa-IR'));
+      const values = priceData.map(([, price]) => price);
+      
+      new Chart(document.getElementById(canvasId), {
         type: "line",
         data: {
           labels: labels,
           datasets: [{
-            label: "قیمت BTC در 24 ساعت گذشته",
+            label: label,
             data: values,
-            borderColor: "#0a8",
-            fill: false
+            borderColor: color,
+            backgroundColor: `${color}20`,
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
           }]
         },
         options: {
           responsive: true,
+          plugins: {
+            legend: {
+              rtl: true,
+              labels: {
+                font: {
+                  family: 'Tahoma'
+                }
+              }
+            }
+          },
           scales: {
+            x: {
+              grid: {
+                display: false
+              }
+            },
             y: {
               beginAtZero: false
             }
@@ -135,8 +432,161 @@
       });
     }
 
-    fetchPrices();
-    loadChart();
+    // رندر نمودار مقایسه‌ای
+    function renderComparisonChart(btcPrices, ethPrices) {
+      const labels = btcPrices.map(([timestamp]) => 
+        new Date(timestamp).toLocaleDateString('fa-IR'));
+      
+      const btcValues = btcPrices.map(([, price]) => price);
+      const ethValues = ethPrices.map(([, price]) => price);
+      
+      new Chart(document.getElementById("comparisonChart"), {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "بیت‌کوین (BTC)",
+              data: btcValues,
+              borderColor: "#f7931a",
+              backgroundColor: "#f7931a20",
+              borderWidth: 2,
+              tension: 0.4
+            },
+            {
+              label: "اتریوم (ETH)",
+              data: ethValues,
+              borderColor: "#627eea",
+              backgroundColor: "#627eea20",
+              borderWidth: 2,
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              rtl: true,
+              labels: {
+                font: {
+                  family: 'Tahoma'
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+    }
+
+    // تنظیم مبدل ارز
+    function setupConverter() {
+      const amountInput = document.getElementById('crypto-amount');
+      const fromSelect = document.getElementById('from-crypto');
+      const toSelect = document.getElementById('to-currency');
+      const resultElement = document.getElementById('conversion-result');
+      
+      function updateConversion() {
+        const amount = parseFloat(amountInput.value) || 0;
+        const fromCrypto = fromSelect.value;
+        const toCurrency = toSelect.value;
+        
+        if (cryptoData[fromCrypto] && currencyRates[toCurrency]) {
+          const usdValue = amount * cryptoData[fromCrypto].current_price;
+          const convertedValue = usdValue * currencyRates[toCurrency];
+          
+          let currencySymbol = '';
+          let formattedValue = '';
+          
+          if (toCurrency === 'usd') {
+            currencySymbol = '$';
+            formattedValue = convertedValue.toLocaleString('en-US', {maximumFractionDigits: 2});
+          } else if (toCurrency === 'eur') {
+            currencySymbol = '€';
+            formattedValue = convertedValue.toLocaleString('de-DE', {maximumFractionDigits: 2});
+          } else {
+            currencySymbol = 'ریال';
+            formattedValue = Math.round(convertedValue).toLocaleString('fa-IR');
+          }
+          
+          resultElement.textContent = `نتیجه: ${currencySymbol} ${formattedValue}`;
+        }
+      }
+      
+      amountInput.addEventListener('input', updateConversion);
+      fromSelect.addEventListener('change', updateConversion);
+      toSelect.addEventListener('change', updateConversion);
+      
+      // محاسبه اولیه
+      updateConversion();
+    }
+
+    // تنظیم به‌روزرسانی خودکار
+    function setupAutoRefresh() {
+      // هر 5 دقیقه داده‌ها را به‌روزرسانی می‌کند
+      setInterval(() => {
+        fetchPrices();
+        console.log('Data refreshed at', new Date().toLocaleTimeString());
+      }, 5 * 60 * 1000);
+    }
+
+    // نمایش خطا
+    function showError(message) {
+      const errorElement = document.createElement('div');
+      errorElement.style.position = 'fixed';
+      errorElement.style.bottom = '20px';
+      errorElement.style.right = '20px';
+      errorElement.style.backgroundColor = '#ff4444';
+      errorElement.style.color = 'white';
+      errorElement.style.padding = '1rem';
+      errorElement.style.borderRadius = '5px';
+      errorElement.style.zIndex = '1000';
+      errorElement.textContent = message;
+      
+      document.body.appendChild(errorElement);
+      
+      setTimeout(() => {
+        errorElement.remove();
+      }, 5000);
+    }
+
+    // تغییر تم تاریک/روشن
+    function setupThemeToggle() {
+      const toggleButton = document.querySelector('.theme-toggle');
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      
+      // اعمال تم ذخیره شده
+      if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        toggleButton.innerHTML = '<i data-feather="sun"></i>';
+      }
+      
+      toggleButton.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        
+        if (currentTheme === 'dark') {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'light');
+          toggleButton.innerHTML = '<i data-feather="moon"></i>';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+          toggleButton.innerHTML = '<i data-feather="sun"></i>';
+        }
+        
+        feather.replace();
+      });
+    }
   </script>
 </body>
 </html>
