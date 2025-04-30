@@ -3,7 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>داشبورد قیمت ارزهای دیجیتال و فیات</title>
+  <title>قیمت لحظه‌ای ارز دیجیتال و نرخ ارز | مبدل ارز دیجیتال و فیات</title>
+  
+  <!-- متا تگ‌های سئو -->
+  <meta name="description" content="قیمت لحظه‌ای بیت‌کوین، اتریوم و سایر ارزهای دیجیتال به همراه نرخ ارزهای فیات (دلار، یورو، پوند، درهم) و مبدل ارز دیجیتال و فیات">
+  <meta name="keywords" content="قیمت بیت‌کوین, قیمت اتریوم, نرخ ارز, قیمت لحظه‌ای ارز دیجیتال, مبدل ارز دیجیتال, مبدل ارز فیات, قیمت دلار, قیمت یورو, قیمت پوند, قیمت درهم">
+  <meta name="author" content="Your Name">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-website.com/">
+  <meta property="og:title" content="قیمت لحظه‌ای ارز دیجیتال و نرخ ارز | مبدل ارز دیجیتال و فیات">
+  <meta property="og:description" content="قیمت لحظه‌ای بیت‌کوین، اتریوم و سایر ارزهای دیجیتال به همراه نرخ ارزهای فیات و مبدل ارز">
+  <meta property="og:image" content="https://your-website.com/og-image.jpg">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://your-website.com/">
+  <meta property="twitter:title" content="قیمت لحظه‌ای ارز دیجیتال و نرخ ارز | مبدل ارز دیجیتال و فیات">
+  <meta property="twitter:description" content="قیمت لحظه‌ای بیت‌کوین، اتریوم و سایر ارزهای دیجیتال به همراه نرخ ارزهای فیات و مبدل ارز">
+  <meta property="twitter:image" content="https://your-website.com/og-image.jpg">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://your-website.com/">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   <style>
@@ -237,54 +263,57 @@
 <body>
   <div class="container">
     <header>
-      <h1>داشبورد قیمت ارزها</h1>
+      <h1>قیمت لحظه‌ای ارز دیجیتال و نرخ ارز</h1>
+      <p class="site-description">مشاهده قیمت لحظه‌ای بیت‌کوین، اتریوم و سایر ارزهای دیجیتال به همراه نرخ ارزهای فیات و مبدل ارز</p>
       <button class="theme-toggle" aria-label="تغییر تم">
         <i data-feather="moon"></i>
       </button>
     </header>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="crypto">ارزهای دیجیتال</button>
-      <button class="tab-btn" data-tab="fiat">ارزهای فیات</button>
-    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="crypto" role="tab" aria-selected="true">ارزهای دیجیتال</button>
+      <button class="tab-btn" data-tab="fiat" role="tab" aria-selected="false">ارزهای فیات</button>
+    </nav>
 
     <!-- بخش ارزهای دیجیتال -->
-    <div id="crypto-tab" class="tab-content active">
+    <section id="crypto-tab" class="tab-content active" role="tabpanel">
+      <h2 class="visually-hidden">قیمت ارزهای دیجیتال</h2>
       <div class="crypto-grid">
-        <div class="card" id="bitcoin-card">
-          <h2>بیت‌کوین <span class="symbol">(BTC)</span></h2>
+        <article class="card" id="bitcoin-card">
+          <h3>بیت‌کوین <span class="symbol">(BTC)</span></h3>
           <div class="price loading">$00,000</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
 
-        <div class="card" id="ethereum-card">
-          <h2>اتریوم <span class="symbol">(ETH)</span></h2>
+        <article class="card" id="ethereum-card">
+          <h3>اتریوم <span class="symbol">(ETH)</span></h3>
           <div class="price loading">$0,000</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
 
-        <div class="card" id="dogecoin-card">
-          <h2>دوج‌کوین <span class="symbol">(DOGE)</span></h2>
+        <article class="card" id="dogecoin-card">
+          <h3>دوج‌کوین <span class="symbol">(DOGE)</span></h3>
           <div class="price loading">$0.00</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
 
-        <div class="card" id="solana-card">
-          <h2>سولانا <span class="symbol">(SOL)</span></h2>
+        <article class="card" id="solana-card">
+          <h3>سولانا <span class="symbol">(SOL)</span></h3>
           <div class="price loading">$000</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
       </div>
 
       <div class="chart-container">
+        <h3>نمودار قیمت بیت‌کوین در 7 روز گذشته</h3>
         <canvas id="btcChart" height="200"></canvas>
       </div>
 
-      <div class="converter">
-        <h2>مبدل ارز دیجیتال</h2>
+      <section class="converter">
+        <h3>مبدل ارز دیجیتال</h3>
         <div class="converter-row">
-          <input type="number" id="crypto-amount" placeholder="مقدار" value="1">
-          <select id="from-crypto">
+          <input type="number" id="crypto-amount" placeholder="مقدار" value="1" aria-label="مقدار ارز دیجیتال">
+          <select id="from-crypto" aria-label="انتخاب ارز دیجیتال">
             <option value="bitcoin">بیت‌کوین (BTC)</option>
             <option value="ethereum">اتریوم (ETH)</option>
             <option value="dogecoin">دوج‌کوین (DOGE)</option>
@@ -293,61 +322,62 @@
           <span>به دلار</span>
         </div>
         <div class="result" id="crypto-conversion-result">نتیجه: —</div>
-      </div>
-    </div>
+      </section>
+    </section>
 
     <!-- بخش ارزهای فیات -->
-    <div id="fiat-tab" class="tab-content">
+    <section id="fiat-tab" class="tab-content" role="tabpanel">
+      <h2 class="visually-hidden">قیمت ارزهای فیات</h2>
       <div class="fiat-grid">
-        <div class="card" id="usd-card">
-          <h2>دلار آمریکا <span class="symbol">(USD)</span></h2>
+        <article class="card" id="usd-card">
+          <h3>دلار آمریکا <span class="symbol">(USD)</span></h3>
           <div class="price loading">— ریال</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
 
-        <div class="card" id="eur-card">
-          <h2>یورو اروپا <span class="symbol">(EUR)</span></h2>
+        <article class="card" id="eur-card">
+          <h3>یورو اروپا <span class="symbol">(EUR)</span></h3>
           <div class="price loading">— ریال</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
 
-        <div class="card" id="gbp-card">
-          <h2>پوند انگلیس <span class="symbol">(GBP)</span></h2>
+        <article class="card" id="gbp-card">
+          <h3>پوند انگلیس <span class="symbol">(GBP)</span></h3>
           <div class="price loading">— ریال</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
 
-        <div class="card" id="aed-card">
-          <h2>درهم امارات <span class="symbol">(AED)</span></h2>
+        <article class="card" id="aed-card">
+          <h3>درهم امارات <span class="symbol">(AED)</span></h3>
           <div class="price loading">—</div>
           <div class="change loading">0.00%</div>
-        </div>
+        </article>
       </div>
 
       <div class="chart-container">
+        <h3>نمودار نرخ یورو در 7 روز گذشته</h3>
         <canvas id="fiatChart" height="200"></canvas>
       </div>
 
-      <div class="converter">
-        <h2>مبدل ارز فیات</h2>
+      <section class="converter">
+        <h3>مبدل ارز فیات</h3>
         <div class="converter-row">
-          <input type="number" id="fiat-amount" placeholder="مقدار" value="1">
-          <select id="from-fiat">
+          <input type="number" id="fiat-amount" placeholder="مقدار" value="1" aria-label="مقدار ارز فیات">
+          <select id="from-fiat" aria-label="انتخاب ارز فیات">
             <option value="usd">دلار آمریکا (USD)</option>
             <option value="eur">یورو (EUR)</option>
             <option value="gbp">پوند انگلیس (GBP)</option>
             <option value="aed">درهم امارات (AED)</option>
           </select>
           <span>به</span>
-          <select id="to-fiat">
+          <select id="to-fiat" aria-label="انتخاب ارز مقصد">
             <option value="irr">تومان ایران (IRR)</option>
             <option value="usd">دلار آمریکا (USD)</option>
-            <option value="eur">یورو (EUR)</option>
           </select>
         </div>
         <div class="result" id="fiat-conversion-result">نتیجه: —</div>
-      </div>
-    </div>
+      </section>
+    </section>
   </div>
 
   <script>
