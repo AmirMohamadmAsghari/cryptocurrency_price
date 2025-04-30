@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>داشبورد قیمت ارز دیجیتال</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .crypto-card {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .crypto-card h2 {
+      margin: 0;
+      color: #0a8;
+    }
+    .price {
+      font-size: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    canvas {
+      margin-top: 2rem;
+    }
+    .converter {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>داشبورد قیمت ارز دیجیتال</h1>
+
+    <div class="crypto-card">
+      <h2>بیت‌کوین (BTC)</h2>
+      <div class="price" id="btc-price">در حال بارگذاری...</div>
+    </div>
+
+    <div class="crypto-card">
+      <h2>اتریوم (ETH)</h2>
+      <div class="price" id="eth-price">در حال بارگذاری...</div>
+    </div>
+
+    <div class="crypto-card">
+      <h2>دوج‌کوین (DOGE)</h2>
+      <div class="price" id="doge-price">در حال بارگذاری...</div>
+    </div>
+
+    <canvas id="btcChart" height="150"></canvas>
+
+    <div class="converter">
+      <h2>مبدل بیت‌کوین به دلار</h2>
+      <input type="number" id="btc-input" placeholder="مقدار BTC" style="padding: 0.5rem; width: 100%;">
+      <p id="btc-output" style="margin-top: 1rem; font-weight: bold;">نتیجه: —</p>
+    </div>
+  </div>
+
+  <script>
+    async function fetchPrices() {
+      try {
+        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin&vs_currencies=usd");
+        const data = await res.json();
+
+        const btc = data.bitcoin.usd;
+        const eth = data.ethereum.usd;
+        const doge = data.dogecoin.usd;
+
+        document.getElementById("btc-price").textContent = `$${btc.toLocaleString()}`;
+        document.getElementById("eth-price").textContent = `$${eth.toLocaleString()}`;
+        document.getElementById("doge-price").textContent = `$${doge.toLocaleString()}`;
+
+        document.getElementById("btc-input").addEventListener("input", (e) => {
+          const val = parseFloat(e.target.value);
+          if (!isNaN(val)) {
+            document.getElementById("btc-output").textContent = `نتیجه: $${(val * btc).toLocaleString()} دلار`;
+          } else {
+            document.getElementById("btc-output").textContent = "نتیجه: —";
+          }
+        });
+
+      } catch (e) {
+        console.error("Error fetching prices", e);
+      }
+    }
+
+    async function loadChart() {
+      const res = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1");
+      const data = await res.json();
+      const prices = data.prices;
+
+      const labels = prices.map(p => new Date(p[0]).toLocaleTimeString());
+      const values = prices.map(p => p[1]);
+
+      new Chart(document.getElementById("btcChart"), {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "قیمت BTC در 24 ساعت گذشته",
+            data: values,
+            borderColor: "#0a8",
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+    }
+
+    fetchPrices();
+    loadChart();
+  </script>
+</body>
+</html>
